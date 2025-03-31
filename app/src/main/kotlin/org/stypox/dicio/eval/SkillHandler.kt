@@ -18,6 +18,7 @@ import org.stypox.dicio.di.SkillContextImpl
 import org.stypox.dicio.di.SkillContextInternal
 import org.stypox.dicio.settings.datastore.UserSettings
 import org.stypox.dicio.settings.datastore.UserSettingsModule
+import org.stypox.dicio.skills.alarm.AlarmInfo
 import org.stypox.dicio.skills.calculator.CalculatorInfo
 import org.stypox.dicio.skills.current_time.CurrentTimeInfo
 import org.stypox.dicio.skills.fallback.text.TextFallbackInfo
@@ -50,6 +51,7 @@ class SkillHandler @Inject constructor(
         TimerInfo,
         CurrentTimeInfo,
         MediaInfo,
+        AlarmInfo
     )
 
     // TODO add more fallback skills (e.g. search)

@@ -28,7 +28,7 @@ android {
 
     defaultConfig {
         applicationId = "net.ellysoft.dicio"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 35
         versionCode = 13
         versionName = "2.0"
