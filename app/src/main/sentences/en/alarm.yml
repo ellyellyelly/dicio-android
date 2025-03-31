@@ -1,0 +1,8 @@
+set:
+  - (set up?)|setup|start|create (a|an)? .name.? alarm for? .time.
+
+cancel:
+  - cancel|stop|disable|end|terminate the? .name.? (alarm|alarms) for .time.
+
+query:
+  - what (alarm|alarms) are? set|created|active|made|start|started
