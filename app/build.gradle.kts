@@ -27,7 +27,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "org.stypox.dicio"
+        applicationId = "net.ellysoft.dicio"
         minSdk = 21
         targetSdk = 36
         versionCode = 15

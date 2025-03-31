@@ -1,9 +1,6 @@
 import me.champeau.gradle.igp.gitRepositories
 import org.eclipse.jgit.api.Git
 import java.io.FileInputStream
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.StandardCopyOption
 import java.util.Properties
 
 rootProject.name = "Dicio"
@@ -23,6 +20,7 @@ pluginManagement {
 plugins {
     // not using version catalog because it is not available in settings.gradle.kts
     id("me.champeau.includegit") version "0.1.6"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
 dependencyResolutionManagement {
