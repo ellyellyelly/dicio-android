@@ -128,6 +128,14 @@
     <string name="stt_say_something">Say something…</string>
     <string name="stt_did_not_understand">I could not understand, try again</string>
     <string name="stt_popup">Speech to text popup</string>
+    <string name="skill_alarm_set">OK, alarm set for %1$s</string>
+    <string name="skill_alarm_set_name">OK, %1$s set for %2$s</string>
+    <string name="skill_alarm_all_canceled">All alarms were canceled</string>
+    <string name="skill_alarm_canceled">The alarm was canceled</string>
+    <string name="skill_alarm_canceled_name">Alarm %1$s was canceled</string>
+    <string name="skill_alarm_when_to_set">When should the alarm go off?</string>
+    <string name="skill_name_alarm">Alarm</string>
+    <string name="skill_sentence_example_alarm">Set alarm for 9:00 AM</string>
     <string name="skill_name_search">Search</string>
     <string name="skill_sentence_example_search">Search how to feed a cat</string>
     <string name="skill_name_weather">Weather</string>
@@ -193,6 +201,7 @@
     <string name="skill_timer_none_canceled">OK, no timer was canceled</string>
     <string name="stt_service_label">Dicio offline speech recognition</string>
     <string name="notification_listener_label">Dicio notification event listener</string>
+    <string name="timer_listener_label">Dicio timer event listener</string>
     <string name="wake_service_label">Dicio wake word service</string>
     <string name="wake_service_foreground_notification_summary">This notification allows the Dicio
         wake word service to listen to the microphone in the background</string>

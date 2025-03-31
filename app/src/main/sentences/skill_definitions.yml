@@ -1,4 +1,20 @@
 skills:
+  - id: alarm
+    specificity: high
+    sentences:
+      - id: set
+        captures:
+          - id: name
+            type: string
+          - id: time
+            type: string
+      - id: cancel
+        captures:
+          - id: name
+            type: string
+          - id: time
+            type: string
+      - id: query
   - id: current_time
     specificity: high
     sentences:
