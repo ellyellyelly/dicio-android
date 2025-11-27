@@ -44,9 +44,9 @@ dependencyResolutionManagement {
 
 
 // All of the code below handles depending on libraries from git repos, in particular dicio-numbers,
-// dicio-skill and dicio-sentences-compiler. The git commits to checkout can be updated here.
-// If you want to use a local copy of the projects (provided that you have cloned them in
-// `../dicio-*`), you can add `useLocalDicioLibraries=true` in `local.properties`.
+// dicio-skill and dicio-sentences-compiler. The git commits to checkout can be updated in the
+// version catalog. If you want to use a local copy of the projects (provided that you have cloned
+// them in `../dicio-*`), you can add `useLocalDicioLibraries=true` in `local.properties`.
 
 data class IncludeGitRepo(
     val name: String,
