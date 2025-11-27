@@ -61,6 +61,7 @@ desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref 
 # update versions for dicio-* libraries under [versions] (they are included via git)
 dicio-numbers = { module = "git.included.build:dicio-numbers" }
 dicio-sentences-compiler = { module = "git.included.build:dicio-sentences-compiler" }
+# these are the two local plugins
 dicio-sentences-compiler-plugin = { module = "org.stypox.dicio.sentencesCompilerPlugin:sentences-compiler-plugin" }
 dicio-unicode-cldr-plugin = { module = "org.stypox.dicio.unicodeCldrPlugin:unicode-cldr-plugin" }
 exp4j = { module = "net.objecthunter:exp4j", version.ref = "exp4j" }
