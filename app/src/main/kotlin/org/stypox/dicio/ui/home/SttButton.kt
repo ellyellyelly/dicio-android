@@ -179,6 +179,20 @@ private fun SttFabPreview(@PreviewParameter(SttStatesPreviews::class) state: Stt
     }
 }
 
+// just another preview to take screenshots for presentations
+@Preview
+@Composable
+private fun SttFabPreview2(@PreviewParameter(SttStatesPreviews::class) state: SttState) {
+    AppTheme {
+        Column(modifier = Modifier.padding(16.dp)) {
+            SttFabImpl(
+                state = state,
+                onClick = {},
+            )
+        }
+    }
+}
+
 // this preview is useful to take screenshots
 @Preview(device = "spec:width=2500px,height=2340px,dpi=440")
 @Composable

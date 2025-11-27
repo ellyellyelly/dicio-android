@@ -1,7 +1,9 @@
 package org.stypox.dicio.ui.home
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,10 +13,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -25,6 +29,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import org.dicio.skill.skill.SkillInfo
 import org.stypox.dicio.R
+import org.stypox.dicio.eval.SkillHandler
 import org.stypox.dicio.ui.theme.AppTheme
 import org.stypox.dicio.ui.util.SkillInfoPreviews
 
@@ -116,10 +121,78 @@ private fun WhatICanDoPreview() {
     }
 }
 
+// this preview is useful to take screenshots for presentations
+@Preview
+@Composable
+private fun WhatICanDoAllPreview() {
+    AppTheme {
+        WhatICanDo(skills = SkillHandler.newForPreviews(LocalContext.current).allSkillInfoList)
+    }
+}
+
 @Preview
 @Composable
 private fun NoEnabledSkillsPreview() {
     AppTheme {
         WhatICanDo(skills = listOf())
+    }
+}
+
+// this preview is useful to take screenshots for presentations
+@Preview(device = "spec:width=2400px,height=2340px,dpi=440")
+@Composable
+private fun SkillChipsPreview() {
+    AppTheme {
+        @OptIn(ExperimentalLayoutApi::class)
+        FlowRow(
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            val skills = SkillHandler.newForPreviews(LocalContext.current).allSkillInfoList
+            for (skill in skills) {
+                Surface(
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    shape = MaterialTheme.shapes.large,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            painter = skill.icon(),
+                            contentDescription = null,
+                            modifier = Modifier.size(36.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = skill.name(LocalContext.current),
+                            style = MaterialTheme.typography.titleMedium,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+// this preview is useful to take screenshots for presentations
+@Preview(device = "spec:width=500px,height=2340px,dpi=440")
+@Composable
+private fun SkillIconsPreview() {
+    @OptIn(ExperimentalLayoutApi::class)
+    FlowRow(
+        horizontalArrangement = Arrangement.Center
+    ) {
+        val skills = SkillHandler.newForPreviews(LocalContext.current).allSkillInfoList
+        for (skill in skills) {
+            Icon(
+                painter = skill.icon(),
+                contentDescription = null,
+                tint = Color(0xFF6D9861),
+                modifier = Modifier.size(36.dp)
+            )
+        }
     }
 }
