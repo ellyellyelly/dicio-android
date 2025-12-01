@@ -57,7 +57,6 @@ class SkillHandler @Inject constructor(
         TranslationInfo,
     )
 
-    // TODO add more fallback skills (e.g. search)
     private val fallbackSkillInfoList = listOf(
         TextFallbackInfo,
     )
