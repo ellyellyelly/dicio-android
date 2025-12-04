@@ -21,7 +21,6 @@ package org.stypox.dicio.io.input.vosk
 
 import android.content.Context
 import android.util.Log
-import androidx.core.os.LocaleListCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +31,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
+import org.stypox.dicio.BuildConfig
 import org.stypox.dicio.di.LocaleManager
 import org.stypox.dicio.io.input.InputEvent
 import org.stypox.dicio.io.input.SttInputDevice
@@ -55,7 +55,6 @@ import org.stypox.dicio.util.LocaleUtils
 import org.stypox.dicio.util.distinctUntilChangedBlockingFirst
 import org.stypox.dicio.util.downloadBinaryFilesWithPartial
 import org.stypox.dicio.util.extractZip
-import org.vosk.BuildConfig
 import org.vosk.LibVosk
 import org.vosk.LogLevel
 import org.vosk.Model
@@ -110,20 +109,12 @@ class VoskInputDevice(
 
     private fun init(locale: Locale): VoskState {
         // choose the model url based on the locale
-        val modelUrl = try {
-            val localeResolutionResult = LocaleUtils.resolveSupportedLocale(
-                LocaleListCompat.create(locale),
-                MODEL_URLS.keys
-            )
-            MODEL_URLS[localeResolutionResult.supportedLocaleString]
-        } catch (e: LocaleUtils.UnsupportedLocaleException) {
-            null
-        }
+        val modelUrl = LocaleUtils.resolveValueForSupportedLocale(locale, MODEL_URLS)
 
         // the model url may change if the user changes app language, or in case of model updates
         val modelUrlChanged = try {
             sameModelUrlCheck.readText() != modelUrl
-        } catch (e: IOException) {
+        } catch (_: IOException) {
             // modelUrlCheck file does not exist
             true
         }
@@ -472,14 +463,17 @@ class VoskInputDevice(
             "es" to "https://alphacephei.com/vosk/models/vosk-model-small-es-0.42.zip",
             "pt" to "https://alphacephei.com/vosk/models/vosk-model-small-pt-0.3.zip",
             "tr" to "https://alphacephei.com/vosk/models/vosk-model-small-tr-0.3.zip",
-            "vn" to "https://alphacephei.com/vosk/models/vosk-model-small-vn-0.3.zip",
+            "vn" to "https://alphacephei.com/vosk/models/vosk-model-small-vn-0.4.zip",
             "it" to "https://alphacephei.com/vosk/models/vosk-model-small-it-0.22.zip",
             "nl" to "https://alphacephei.com/vosk/models/vosk-model-small-nl-0.22.zip",
             "ca" to "https://alphacephei.com/vosk/models/vosk-model-small-ca-0.4.zip",
-            "fa" to "https://alphacephei.com/vosk/models/vosk-model-small-fa-0.4.zip",
+            "ar" to "https://alphacephei.com/vosk/models/vosk-model-ar-mgb2-0.4.zip",
+            "ar-tn" to "https://alphacephei.com/vosk/models/vosk-model-small-ar-tn-0.1-linto.zip",
+            "fa" to "https://alphacephei.com/vosk/models/vosk-model-small-fa-0.42.zip",
             "ph" to "https://alphacephei.com/vosk/models/vosk-model-tl-ph-generic-0.6.zip",
             "uk" to "https://alphacephei.com/vosk/models/vosk-model-small-uk-v3-nano.zip",
             "kz" to "https://alphacephei.com/vosk/models/vosk-model-small-kz-0.15.zip",
+            "sv" to "https://alphacephei.com/vosk/models/vosk-model-small-sv-rhasspy-0.15.zip",
             "ja" to "https://alphacephei.com/vosk/models/vosk-model-small-ja-0.22.zip",
             "eo" to "https://alphacephei.com/vosk/models/vosk-model-small-eo-0.42.zip",
             "hi" to "https://alphacephei.com/vosk/models/vosk-model-small-hi-0.22.zip",
@@ -487,6 +481,10 @@ class VoskInputDevice(
             "pl" to "https://alphacephei.com/vosk/models/vosk-model-small-pl-0.22.zip",
             "uz" to "https://alphacephei.com/vosk/models/vosk-model-small-uz-0.22.zip",
             "ko" to "https://alphacephei.com/vosk/models/vosk-model-small-ko-0.22.zip",
+            "br" to "https://alphacephei.com/vosk/models/vosk-model-br-0.8.zip",
+            "gu" to "https://alphacephei.com/vosk/models/vosk-model-small-gu-0.42.zip",
+            "tg" to "https://alphacephei.com/vosk/models/vosk-model-small-tg-0.22.zip",
+            "te" to "https://alphacephei.com/vosk/models/vosk-model-small-te-0.42.zip",
         )
     }
 }

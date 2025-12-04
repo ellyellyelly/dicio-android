@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import org.dicio.skill.context.SkillContext
 import org.dicio.skill.skill.Skill
 import org.dicio.skill.skill.SkillInfo
 import org.stypox.dicio.di.LocaleManager
@@ -22,6 +21,7 @@ import org.stypox.dicio.skills.alarm.AlarmInfo
 import org.stypox.dicio.skills.calculator.CalculatorInfo
 import org.stypox.dicio.skills.current_time.CurrentTimeInfo
 import org.stypox.dicio.skills.fallback.text.TextFallbackInfo
+import org.stypox.dicio.skills.listening.ListeningInfo
 import org.stypox.dicio.skills.lyrics.LyricsInfo
 import org.stypox.dicio.skills.media.MediaInfo
 import org.stypox.dicio.skills.navigation.NavigationInfo
@@ -29,7 +29,9 @@ import org.stypox.dicio.skills.open.OpenInfo
 import org.stypox.dicio.skills.search.SearchInfo
 import org.stypox.dicio.skills.telephone.TelephoneInfo
 import org.stypox.dicio.skills.timer.TimerInfo
+import org.stypox.dicio.skills.translation.TranslationInfo
 import org.stypox.dicio.skills.weather.WeatherInfo
+import org.stypox.dicio.skills.joke.JokeInfo
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -52,9 +54,11 @@ class SkillHandler @Inject constructor(
         CurrentTimeInfo,
         MediaInfo,
         AlarmInfo
+        JokeInfo,
+        ListeningInfo(dataStore),
+        TranslationInfo,
     )
 
-    // TODO add more fallback skills (e.g. search)
     private val fallbackSkillInfoList = listOf(
         TextFallbackInfo,
     )

@@ -2,21 +2,10 @@ package org.stypox.dicio.util
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import org.stypox.dicio.util.LocaleUtils.UnsupportedLocaleException
-import org.stypox.dicio.util.LocaleUtils.resolveLocaleString
-import java.util.Locale
 
 private fun getLocaleString(locale: String, vararg supportedLocales: String): String {
-    val convertedLocale: Locale
-    val parts = locale.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-    convertedLocale = if (parts.size == 1) {
-        Locale(locale)
-    } else {
-        Locale(parts[0], parts[1])
-    }
-
-    return resolveLocaleString(
-        convertedLocale,
+    return LocaleUtils.resolveLocaleString(
+        LocaleUtils.parseLanguageCountry(locale),
         HashSet(listOf(*supportedLocales))
     )
 }
@@ -33,7 +22,7 @@ private fun assertLocaleNotFound(locale: String, vararg supportedLocales: String
     val localeString: String
     try {
         localeString = getLocaleString(locale, *supportedLocales)
-    } catch (e: UnsupportedLocaleException) {
+    } catch (_: LocaleUtils.UnsupportedLocaleException) {
         return
     }
     error("The locale \"$locale\" should not have been found: $localeString")
@@ -56,8 +45,13 @@ class LocaleUtilsTest : StringSpec({
     "locale with different lower/upper case" {
         assertLocale("it-it", "it-IT", "it", "it-it")
         assertLocale("it", "it-IT", "it", "fr", "FR-fr")
-        assertLocale("it", "it-IT", "it", "it-IT", "fr", "FR-fr")
-        assertLocaleNotFound("it", "IT", "IT-it")
+        assertLocale("it-IT", "it-IT", "it", "it-IT", "fr", "FR-fr")
+    }
+
+    "locale with underscores" {
+        assertLocale("it_it", "it-IT", "it", "it_it")
+        assertLocale("it", "it-IT", "it", "fr", "FR_fr")
+        assertLocale("it_IT", "it-IT", "it", "it_IT", "fr", "FR_fr")
     }
 
     "locale should not be found" {

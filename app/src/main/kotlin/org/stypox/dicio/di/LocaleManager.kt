@@ -32,7 +32,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class LocaleManager @Inject constructor(
-    @ApplicationContext private val appContext: Context,
+    @param:ApplicationContext private val appContext: Context,
     dataStore: DataStore<UserSettings>,
 ) {
     // We obtain the system locale list when the app starts (which is also when `LocaleManager` is
@@ -71,7 +71,7 @@ class LocaleManager @Inject constructor(
 
     private fun getSentencesLocale(language: Language): LocaleUtils.LocaleResolutionResult {
         return try {
-            LocaleUtils.resolveSupportedLocale(
+            LocaleUtils.resolveSupportedLocaleOrThrow(
                 getAvailableLocalesFromLanguage(language),
                 Sentences.languages
             )
@@ -93,7 +93,8 @@ class LocaleManager @Inject constructor(
             }
             else -> {
                 // exploit the fact that each `Language` is of the form LANGUAGE or LANGUAGE_COUNTRY
-                LocaleListCompat.create(LocaleUtils.parseLanguageCountry(language.toString()))
+                LocaleListCompat.create(LocaleUtils.parseLanguageCountry(
+                    language.toString().removePrefix("LANGUAGE_")))
             }
         }
     }

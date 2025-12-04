@@ -48,9 +48,11 @@ fun languageSetting() = ListSetting(
         ListSetting.Value(Language.LANGUAGE_EL, "Ελληνικά"),
         ListSetting.Value(Language.LANGUAGE_FR, "Français"),
         ListSetting.Value(Language.LANGUAGE_IT, "Italiano"),
+        ListSetting.Value(Language.LANGUAGE_NL, "Nederlands"),
         ListSetting.Value(Language.LANGUAGE_PL, "Polski"),
         ListSetting.Value(Language.LANGUAGE_RU, "Русский"),
         ListSetting.Value(Language.LANGUAGE_SL, "Slovenščina"),
+        ListSetting.Value(Language.LANGUAGE_SV, "Svenska"),
         ListSetting.Value(Language.LANGUAGE_UK, "Українська"),
     ),
 )

@@ -1,18 +1,18 @@
 # Dicio assistant
 
-Dicio is a *free and open source* **voice assistant** running on Android. It supports many different **skills** and input/output methods, and it provides both **speech** and **graphical** feedback to a question. It interprets user input and (when possible) generates user output entirely **on-device**, providing privacy by design. It has **multilanguage** support, and is currently available in these languages: Czech, English, French, German, Greek, Italian, Polish, Russian, Slovenian, Spanish and Ukrainian. Open to contributions :-D
+Dicio is a *free and open source* **voice assistant** running on Android. It supports many different **skills** and input/output methods, and it provides both **speech** and **graphical** feedback to a question. It interprets user input and (when possible) generates user output entirely **on-device**, providing privacy by design. It has **multilanguage** support, and is currently available in these languages: Czech, Dutch, English, French, German, Greek, Italian, Polish, Russian, Slovenian, Spanish, Swedish and Ukrainian. Open to contributions :-D
 
 <p align="center">
-    <img height="80" alt="Dicio logo" src="./app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
+    <img width="80" alt="Dicio logo" src="./app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
     &emsp;
     <a href="https://f-droid.org/packages/org.stypox.dicio">
-        <img height="80" alt="Get it on F-Droid" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png">
+        <img width="206" alt="Get it on F-Droid" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png">
     </a>
     <a href="https://github.com/Stypox/dicio-android/releases">
-        <img height="80" alt="Get it on GitHub" src="./meta/get-it-on-github.png">
+        <img width="206" alt="Get it on GitHub" src="./meta/get-it-on-github.png">
     </a>
     <a href="https://play.google.com/store/apps/details?id=org.stypox.dicio">
-        <img height="80" alt="Get it on Play Store" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png">
+        <img width="206" alt="Get it on Play Store" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png">
     </a>
 </p>
 
@@ -23,6 +23,7 @@ Dicio is a *free and open source* **voice assistant** running on Android. It sup
 [<img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width=200>](./fastlane/metadata/android/en-US/images/phoneScreenshots/2.png)
 [<img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width=200>](./fastlane/metadata/android/en-US/images/phoneScreenshots/3.png)
 [<img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width=200>](./fastlane/metadata/android/en-US/images/phoneScreenshots/4.png)
+[<img src="./fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" width=200>](./fastlane/metadata/android/en-US/images/phoneScreenshots/4.png)
 
 ## Skills
 
@@ -36,7 +37,10 @@ Currently Dicio answers questions about:
 - **timer**: set, query and cancel timers - _Set a timer for five minutes_
 - **current time**: query current time - _What time is it?_
 - **navigation**: opens the navigation app at the requested position - _Take me to New York, fifteenth avenue_
+- **jokes**: tells you a joke - _Tell me a joke_
 - **media**: play, pause, previous, next song
+- **translation**: translate from/to any language with **Lingva** - _How do I say Football in German?_
+- **wake word control**: turn on/off the wakeword - _Stop listening_
 
 ## Speech to text
 
@@ -66,7 +70,7 @@ If you want to translate Dicio to a new language you have to follow these **step
 - Translate the **sentences** used by Dicio to identify a user's request and to feed it to the correct skill. To do this open the repository root and navigate to `app/src/main/sentences/`. Copy-paste the `en` folder (i.e. the one containing English translations) and call the new folder with the 2- or 3-letter name of your language (in particular, any `ISO-639`-compliant language ID is supported). Then open the newly created folder: inside there will be some YAML files in English language. Open each one of them and translate the English content; feel free to add/remove sentences if their translation does not fit into your language and remember those sentences need to identify as better as possible what the user said. Do **NOT** change the name of the copied files, the IDs of the sentences (i.e. the `sentence_id:` before each list of sentences) or the IDs of the capturing groups (i.e. the `.ID.` construct). To learn about the Dicio sentences language syntax, please refer to the documentation and the [example](https://github.com/Stypox/dicio-sentences-compiler#example) in [`dicio-sentences-compiler`](https://github.com/Stypox/dicio-sentences-compiler#dicio-sentences-language). Hopefully in the future a custom translation system will be used for sentences.
 
 - Once both the Weblate and the sentences translations are ready, add the new language to the app's language selector. This requires modifying two files. In the following instructions `$iso-language-id$`, `$ISO_LANGUAGE_ID$` and `$Language name$` are placeholders you should fill in, e.g. `en-in`, `EN_IN` and `English (India)`.
-  1. in [app/src/main/proto/language.proto](./app/src/main/proto/language.proto#L8) add a new entry at the **bottom** of the `Language` enum like so: `LANGUAGE_$ISO_LANGUAGE_ID$ = $increasing number$; // $Language name$`. Use the last number incremented by 1 as `$increasing number$`.
+  1. in [app/src/main/proto/language.proto](./app/src/main/proto/language.proto#L8) add a new entry to the `Language` enum like so: `LANGUAGE_$ISO_LANGUAGE_ID$ = $increasing number$; // $Language name$`. Use the previous highest number in the enum incremented by 1 as `$increasing number$`. The position of the newly added item should make it so that the items are sorted by their language name.
   2. in [app/src/main/kotlin/org/stypox/dicio/settings/Definitions.kt](./app/src/main/kotlin/org/stypox/dicio/settings/Definitions.kt#L33) add a new item to `languageSetting.possibleValues` like so: `ListSetting.Value(Language.LANGUAGE_$ISO_LANGUAGE_ID$, "$Language name$"),`. The position of the newly added item should make it so that the items are sorted by their language name.
 
 - Then update the app descriptions so that people know that the language you are adding is supported. The files you should edit are [README.md](./README.md) (i.e. the file you are currently viewing) and [fastlane/metadata/android/en-US/full_description.txt](./fastlane/metadata/android/en-US/full_description.txt) (the English description for F-Droid).

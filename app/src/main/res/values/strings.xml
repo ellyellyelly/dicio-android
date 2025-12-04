@@ -146,6 +146,8 @@
     <string name="skill_sentence_example_open">Open NewPipe</string>
     <string name="skill_name_media">Media control</string>
     <string name="skill_sentence_example_media">Next song</string>
+    <string name="skill_name_joke">Joke</string>
+    <string name="skill_sentence_example_joke">Tell me a joke</string>
     <string name="skill_name_calculator">Calculator</string>
     <string name="skill_sentence_example_calculator">What is five times four minus a million?</string>
     <string name="skill_name_navigation">Navigation</string>
@@ -222,6 +224,21 @@
     <string name="retry">Retry</string>
     <string name="stop">Stop</string>
     <string name="grant_permissions">Grant permissions</string>
+    <string name="skill_listening_already_listening">I am already listening for the wake word</string>
+    <string name="skill_listening_started_listening">OK, I\'ll listen for the wake word</string>
+    <string name="skill_listening_not_listening">I wasn\'t listening</string>
+    <string name="skill_listening_stop_listening">OK</string>
+    <string name="skill_listening_disabled">The wake word service is disabled in settings</string>
+    <string name="skill_name_listening">Control wake word listening</string>
+    <string name="skill_sentence_example_listening">Stop listening</string>
+    <string name="skill_translation_success">Translated to %1$s</string>
+    <string name="skill_translation_unknown_language">I don\'t recognize language %1$s</string>
+    <string name="skill_translation_unsupported_language">Language %1$s (%2$s) is not supported</string>
+    <string name="skill_translation_failed">Unable to translate your query into %1$s</string>
+    <string name="skill_translation_failed_no_query">I didn\'t understand, could you repeat what you want to translate?</string>
+    <string name="skill_translation_to">to</string>
+    <string name="skill_name_translation">Translate</string>
+    <string name="skill_sentence_example_translation">Translate Hola from Spanish to English</string>
     <string name="pref_weather_temperature_unit">Temperature unit</string>
     <string name="use_system_default">Use system default</string>
     <string name="pref_weather_unit_system_instructions">Uses the unit configured in \"System settings > System > Languages &amp; input > Regional preferences\"</string>
@@ -236,4 +253,7 @@
     <string name="skill_weather_kelvin">K</string>
     <string name="skill_weather_meters_per_second">m/s</string>
     <string name="skill_weather_miles_per_hour">mph</string>
+    <string name="failed_to_copy">Failed to copy to clipboard</string>
+    <string name="skill_translation_auto">Auto</string>
+    <string name="skill_search_duckduckgo_recaptcha">DuckDuckGo did not provide results, asking for a Captcha to be solved</string>
 </resources>

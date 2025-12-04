@@ -6,8 +6,9 @@ import java.util.Properties
 rootProject.name = "Dicio"
 include(":app")
 include(":skill")
-// we use includeBuild here since the plugin is a compile-time dependency
+// we use includeBuild here since the plugins are compile-time dependencies
 includeBuild("sentences-compiler-plugin")
+includeBuild("unicode-cldr-plugin")
 
 pluginManagement {
     repositories {
@@ -18,9 +19,16 @@ pluginManagement {
 }
 
 plugins {
-    // not using version catalog because it is not available in settings.gradle.kts
-    id("me.champeau.includegit") version "0.1.6"
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+    // need to manually read version catalog because it is not available in settings.gradle.kts
+    // this code is duplicate with the below but there is no way to avoid it...
+    fun findInVersionCatalog(versionIdentifier: String): String {
+        val regex = "^.*$versionIdentifier *= *\"([^\"]+)\".*$".toRegex()
+        return File("gradle/libs.versions.toml")
+            .readLines()
+            .firstNotNullOf { regex.find(it)?.groupValues?.get(1) }
+    }
+
+    id("me.champeau.includegit") version findInVersionCatalog("includegitPlugin")
 }
 
 dependencyResolutionManagement {
@@ -33,9 +41,9 @@ dependencyResolutionManagement {
 
 
 // All of the code below handles depending on libraries from git repos, in particular dicio-numbers,
-// dicio-skill and dicio-sentences-compiler. The git commits to checkout can be updated here.
-// If you want to use a local copy of the projects (provided that you have cloned them in
-// `../dicio-*`), you can add `useLocalDicioLibraries=true` in `local.properties`.
+// dicio-skill and dicio-sentences-compiler. The git commits to checkout can be updated in the
+// version catalog. If you want to use a local copy of the projects (provided that you have cloned
+// them in `../dicio-*`), you can add `useLocalDicioLibraries=true` in `local.properties`.
 
 data class IncludeGitRepo(
     val name: String,
@@ -44,18 +52,27 @@ data class IncludeGitRepo(
     val commit: String,
 )
 
+// need to manually read version catalog because it is not available in settings.gradle.kts
+// this code is duplicate with the above but there is no way to avoid it...
+fun findInVersionCatalog(versionIdentifier: String): String {
+    val regex = "^.*$versionIdentifier *= *\"([^\"]+)\".*$".toRegex()
+    return File("gradle/libs.versions.toml")
+        .readLines()
+        .firstNotNullOf { regex.find(it)?.groupValues?.get(1) }
+}
+
 val includeGitRepos = listOf(
     IncludeGitRepo(
         name = "dicio-numbers",
         uri = "https://github.com/Stypox/dicio-numbers",
         projectPath = ":numbers",
-        commit = "66fd44b79585f952b76d16e5578d4d6aa5bc030c",
+        commit = findInVersionCatalog("dicioNumbers"),
     ),
     IncludeGitRepo(
         name = "dicio-sentences-compiler",
         uri = "https://github.com/Stypox/dicio-sentences-compiler",
         projectPath = ":sentences_compiler",
-        commit = "7d83fe5a3d6dff2fc81b5c40783a1d82ada293d3",
+        commit = findInVersionCatalog("dicioSentencesCompiler"),
     ),
 )
 
@@ -80,11 +97,21 @@ if (localProperties.getOrDefault("useLocalDicioLibraries", "") == "true") {
 } else {
     // if the repo has already been cloned, the gitRepositories plugin is buggy and doesn't
     // fetch the remote repo before trying to checkout the commit (in case the commit has changed),
-    // so we need to do it manually
+    // and doesn't clone the repo again if the remote changed, so we need to do it manually
     for (repo in includeGitRepos) {
         val file = File("$rootDir/checkouts/${repo.name}")
         if (file.isDirectory) {
-            Git.open(file).fetch().call()
+            val git = Git.open(file)
+            val sameRemote = git.remoteList().call()
+                .any { rem -> rem.urIs.any { uri -> uri.toString() == repo.uri } }
+            if (sameRemote) {
+                // the commit may have changed, fetch again
+                git.fetch().call()
+            } else {
+                // the remote changed, delete the repository and start from scratch
+                println("Git: remote for ${repo.name} changed, deleting the current folder")
+                file.deleteRecursively()
+            }
         }
     }
 
