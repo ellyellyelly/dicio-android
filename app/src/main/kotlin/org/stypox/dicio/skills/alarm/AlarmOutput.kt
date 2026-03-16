@@ -45,7 +45,7 @@ sealed interface AlarmOutput : SkillOutput {
         override fun getInteractionPlan(ctx: SkillContext): InteractionPlan {
             val timeSkill = object : Skill<LocalTime?>(AlarmInfo, Specificity.HIGH) {
                 override fun score(ctx: SkillContext, input: String): Pair<Score, LocalTime?> {
-                    val time = ctx.parserFormatter!!.extractDateTime(input).first?.toLocalTime()
+                    val time = ctx.parserFormatter!!.extractDateTime(input).parseFirst()?.toLocalTime()
                     return Pair(
                         if (time == null) AlwaysWorstScore else AlwaysBestScore,
                         time

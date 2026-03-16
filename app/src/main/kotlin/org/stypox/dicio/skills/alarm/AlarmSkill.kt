@@ -18,7 +18,7 @@ class AlarmSkill(correspondingSkillInfo: SkillInfo, data: StandardRecognizerData
         return when (inputData) {
             is Alarm.Set -> {
                 val time = inputData.time?.let {
-                    ctx.parserFormatter?.extractDateTime(it)?.first?.toLocalTime()
+                    ctx.parserFormatter?.extractDateTime(it)?.parseFirst()?.toLocalTime()
                 }
 
                 if (time == null) {
@@ -34,7 +34,7 @@ class AlarmSkill(correspondingSkillInfo: SkillInfo, data: StandardRecognizerData
             }
             is Alarm.Cancel -> {
                 val time = inputData.time?.let {
-                    ctx.parserFormatter?.extractDateTime(it)?.first?.toLocalTime()
+                    ctx.parserFormatter?.extractDateTime(it)?.parseFirst()?.toLocalTime()
                 }
 
                 cancelAlarm(ctx, time, inputData.name)
