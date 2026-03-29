@@ -73,10 +73,27 @@ sealed interface AlarmOutput : SkillOutput {
         // To-Do: finish implementing
     }
 
-    class Cancel(
+    class CancelAll(
         private val speechOut: String
     ) : AlarmOutput, HeadlineSpeechSkillOutput {
         override fun getSpeechOutput(ctx: SkillContext): String = speechOut
+    }
+
+    class CancelTime(
+        private val time: LocalTime
+    ) : AlarmOutput {
+        override fun getSpeechOutput(ctx: SkillContext): String {
+            val formattedTime = getFormattedTime(ctx.parserFormatter!!, time)
+            return ctx.getString(R.string.skill_alarm_canceled_time, formattedTime)
+        }
+
+        @Composable
+        override fun GraphicalOutput(ctx: SkillContext) {
+            Headline(
+                text = getSpeechOutput(ctx)
+            )
+        }
+
     }
 
     class Query(

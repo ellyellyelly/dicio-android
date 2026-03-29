@@ -52,7 +52,7 @@ class AlarmSkill(correspondingSkillInfo: SkillInfo, data: StandardRecognizerData
         alarmIntent.putExtra(AlarmClock.EXTRA_MINUTES, time.minute)
         alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         alarmIntent.putExtra(AlarmClock.EXTRA_SKIP_UI, true)
-        ctx.android.startActivity(alarmIntent);
+        ctx.android.startActivity(alarmIntent)
 
         return AlarmOutput.Set(
             time,
@@ -73,8 +73,25 @@ class AlarmSkill(correspondingSkillInfo: SkillInfo, data: StandardRecognizerData
         name: String?
     ): SkillOutput {
         val alarmIntent = Intent(AlarmClock.ACTION_DISMISS_ALARM)
-        // To-Do: filter for alarm type and time
-        alarmIntent.putExtra(AlarmClock.EXTRA_ALARM_SEARCH_MODE, AlarmClock.ALARM_SEARCH_MODE_ALL)
+
+        val alarmOutput : AlarmOutput
+
+        if (time != null) {
+            // Filter for a given time on the alarm
+            alarmIntent.putExtra(AlarmClock.EXTRA_ALARM_SEARCH_MODE, AlarmClock.ALARM_SEARCH_MODE_TIME)
+            alarmIntent.putExtra(AlarmClock.EXTRA_HOUR, time.hour)
+            alarmIntent.putExtra(AlarmClock.EXTRA_MINUTES, time.minute)
+
+            alarmOutput = AlarmOutput.CancelTime(time)
+        }
+        else {
+            // Cancel all alarms if no time specified
+            // To-Do: only cancel next alarm
+            alarmIntent.putExtra(AlarmClock.EXTRA_ALARM_SEARCH_MODE, AlarmClock.ALARM_SEARCH_MODE_ALL)
+            alarmOutput = AlarmOutput.CancelAll(
+                    ctx.getString(R.string.skill_alarm_all_canceled)
+            )
+        }
         alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         // this will not work with stock or AOSP DeskClock
@@ -82,11 +99,9 @@ class AlarmSkill(correspondingSkillInfo: SkillInfo, data: StandardRecognizerData
         // for dismiss_alarm action
         alarmIntent.putExtra(AlarmClock.EXTRA_SKIP_UI, true)
 
-        ctx.android.startActivity(alarmIntent);
+        ctx.android.startActivity(alarmIntent)
 
-        return AlarmOutput.Cancel(
-            ctx.getString(R.string.skill_alarm_all_canceled)
-        )
+        return alarmOutput
     }
 
 }
