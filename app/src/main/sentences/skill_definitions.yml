@@ -14,7 +14,8 @@ skills:
             type: string
           - id: time
             type: string
-      - id: query
+      - id: query_next
+      - id: query_all
   - id: current_time
     specificity: high
     sentences:

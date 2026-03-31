@@ -5,5 +5,10 @@ cancel:
   - cancel|stop|disable|end|terminate the? .time. (alarm|alarms)
   - cancel|stop|disable|end|terminate the? .name.? (alarm|alarms) for? .time.
 
-query:
-  - what (alarm|alarms) are? set|created|active|made|start|started
+query_next:
+  - when is? (the|my)? next? alarm (set|ready|for)?
+
+query_all:
+  - what (alarm|alarms) are? (set|ready|created)
+  - when are? my? alarms
+

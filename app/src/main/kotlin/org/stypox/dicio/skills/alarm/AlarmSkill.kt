@@ -1,5 +1,7 @@
 package org.stypox.dicio.skills.alarm
 
+import android.app.AlarmManager
+import android.content.Context
 import android.content.Intent
 import android.provider.AlarmClock
 import org.dicio.skill.context.SkillContext
@@ -10,7 +12,10 @@ import org.dicio.skill.standard.StandardRecognizerSkill
 import org.stypox.dicio.R
 import org.stypox.dicio.sentences.Sentences.Alarm
 import org.stypox.dicio.util.getString
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 class AlarmSkill(correspondingSkillInfo: SkillInfo, data: StandardRecognizerData<Alarm>) :
     StandardRecognizerSkill<Alarm>(correspondingSkillInfo, data) {
@@ -28,9 +33,12 @@ class AlarmSkill(correspondingSkillInfo: SkillInfo, data: StandardRecognizerData
                     setAlarm(ctx, time, inputData.name)
                 }
             }
-            is Alarm.Query -> {
+            is Alarm.QueryNext -> {
                 // To-Do: support querying specific alarms
-                queryAlarm(ctx, null)
+                queryNextAlarm(ctx)
+            }
+            is Alarm.QueryAll -> {
+                queryAllAlarms(ctx)
             }
             is Alarm.Cancel -> {
                 val time = inputData.time?.let {
@@ -60,11 +68,38 @@ class AlarmSkill(correspondingSkillInfo: SkillInfo, data: StandardRecognizerData
         )
     }
 
-    private fun queryAlarm(
-        ctx: SkillContext,
-        name: String?
+    private fun queryAllAlarms(
+        ctx: SkillContext
     ): SkillOutput {
-        TODO()
+        val alarmIntent = Intent(AlarmClock.ACTION_SHOW_ALARMS)
+        alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        ctx.android.startActivity(alarmIntent)
+        return AlarmOutput.QueryAll()
+
+    }
+
+    private fun queryNextAlarm(
+        ctx: SkillContext
+    ): SkillOutput {
+        val alarmManager = ctx.android.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // This could be an alarm set by a non-Clock app
+        // but we will leave this feature in as-is for now
+        val alarmClock = alarmManager.nextAlarmClock
+
+        if (alarmClock == null) {
+            return AlarmOutput.QueryNone()
+        }
+        else {
+            val longTimeSeconds = alarmClock.triggerTime / 1000
+            val zoneId = ZoneId.systemDefault()
+            val localTime = LocalDateTime
+                .ofEpochSecond(longTimeSeconds, 0, ZoneOffset.UTC)
+                .atZone(ZoneOffset.UTC)
+                .withZoneSameInstant(zoneId)
+                .toLocalTime()
+            return AlarmOutput.QueryNext(localTime)
+        }
     }
 
     private fun cancelAlarm(

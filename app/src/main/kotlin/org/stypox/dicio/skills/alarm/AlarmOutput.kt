@@ -1,7 +1,6 @@
 package org.stypox.dicio.skills.alarm
 
 import androidx.annotation.StringRes
-import androidx.compose.runtime.Composable
 import org.dicio.numbers.ParserFormatter
 import org.dicio.skill.context.SkillContext
 import org.dicio.skill.skill.AlwaysBestScore
@@ -12,7 +11,6 @@ import org.dicio.skill.skill.Skill
 import org.dicio.skill.skill.SkillOutput
 import org.dicio.skill.skill.Specificity
 import org.stypox.dicio.R
-import org.stypox.dicio.io.graphical.Headline
 import org.stypox.dicio.io.graphical.HeadlineSpeechSkillOutput
 import org.stypox.dicio.util.getString
 import java.time.LocalTime
@@ -22,17 +20,10 @@ sealed interface AlarmOutput : SkillOutput {
         private val time: LocalTime,
         private val name: String?
 
-    ) : AlarmOutput {
+    ) : AlarmOutput, HeadlineSpeechSkillOutput {
         override fun getSpeechOutput(ctx: SkillContext): String = formatStringWithName(
             ctx, name, time, R.string.skill_alarm_set, R.string.skill_alarm_set_name
         )
-
-        @Composable
-        override fun GraphicalOutput(ctx: SkillContext) {
-            Headline(
-                text = getSpeechOutput(ctx)
-            )
-        }
 
     }
 
@@ -81,26 +72,30 @@ sealed interface AlarmOutput : SkillOutput {
 
     class CancelTime(
         private val time: LocalTime
-    ) : AlarmOutput {
+    ) : AlarmOutput, HeadlineSpeechSkillOutput {
         override fun getSpeechOutput(ctx: SkillContext): String {
             val formattedTime = getFormattedTime(ctx.parserFormatter!!, time)
             return ctx.getString(R.string.skill_alarm_canceled_time, formattedTime)
         }
-
-        @Composable
-        override fun GraphicalOutput(ctx: SkillContext) {
-            Headline(
-                text = getSpeechOutput(ctx)
-            )
-        }
-
     }
 
-    class Query(
-        private val speechOut: String
+    class QueryNext(
+        private val time: LocalTime
     ) : AlarmOutput, HeadlineSpeechSkillOutput {
-        override fun getSpeechOutput(ctx: SkillContext): String = speechOut
+        override fun getSpeechOutput(ctx: SkillContext): String {
+            val formattedTime = getFormattedTime(ctx.parserFormatter!!, time)
+            return ctx.getString(R.string.skill_alarm_query_next, formattedTime)
+        }
     }
+
+    class QueryAll() : AlarmOutput, HeadlineSpeechSkillOutput {
+        override fun getSpeechOutput(ctx: SkillContext): String = ctx.getString(R.string.skill_alarm_query_all)
+    }
+
+    class QueryNone() : AlarmOutput, HeadlineSpeechSkillOutput {
+        override fun getSpeechOutput(ctx: SkillContext): String = ctx.getString(R.string.skill_alarm_query_none)
+    }
+
 }
 
 fun formatStringWithName(
